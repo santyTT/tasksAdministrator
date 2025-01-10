@@ -26,11 +26,11 @@ function App() {
   };
 
   return (
-    <Router>
+    <Router basename="/tasksAdministrator">
       <Routes>
         <Route
           path="/"
-          element={user ? <Navigate to={`/${user.role}`} /> : <Login onLogin={handleLogin} />}
+          element={user ? <Navigate to={`/${user.role}`} replace /> : <Login onLogin={handleLogin} />}
         />
         <Route
           path="/admin"
@@ -38,7 +38,7 @@ function App() {
             user?.role === "admin" ? (
               <AdminDashboard onLogout={handleLogout} />
             ) : (
-              <Navigate to="/" />
+              <Navigate to="/" replace />
             )
           }
         />
@@ -48,7 +48,7 @@ function App() {
             user?.role === "user" ? (
               <UserDashboard onLogout={handleLogout} />
             ) : (
-              <Navigate to="/" />
+              <Navigate to="/" replace />
             )
           }
         />
