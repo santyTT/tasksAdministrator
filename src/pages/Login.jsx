@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import "../styles/stylesLogin.css";
 import { Home } from 'lucide-react';
@@ -7,6 +7,13 @@ const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(''); // Estado para mostrar errores
+
+  // Aseguramos que los usuarios están en localStorage
+  useEffect(() => {
+    if (!localStorage.getItem("users")) {
+      localStorage.setItem("users", JSON.stringify([])); // Inicia con un array vacío si no hay usuarios
+    }
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
