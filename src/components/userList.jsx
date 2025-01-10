@@ -2,25 +2,22 @@ import { useState, useEffect } from "react";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(""); // Estado para la búsqueda
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // Obtener usuarios del localStorage
   useEffect(() => {
     const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
     setUsers(storedUsers);
   }, []);
 
   const filteredUsers = users.filter((user) => {
-    // Verificamos si las propiedades del usuario existen antes de intentar acceder a ellas
     const searchText = searchQuery.toLowerCase();
     return (
       (user.username && user.username.toLowerCase().includes(searchText)) ||
       (user.email && user.email.toLowerCase().includes(searchText)) ||
-      (user.id && String(user.id).toLowerCase().includes(searchText)) // Convertir ID a cadena
+      (user.id && String(user.id).toLowerCase().includes(searchText))
     );
   });
 
-  // Eliminar un usuario
   const handleDeleteUser = (id) => {
     const updatedUsers = users.filter((user) => user.id !== id);
     localStorage.setItem("users", JSON.stringify(updatedUsers));
@@ -34,14 +31,16 @@ const UserList = () => {
         type="text"
         placeholder="Buscar por ID, correo o nombre"
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)} // Actualizar búsqueda
+        onChange={(e) => setSearchQuery(e.target.value)}
       />
       <ul>
         {filteredUsers.length > 0 ? (
           filteredUsers.map((user) => (
             <li key={user.id}>
               {user.username} - {user.email}
-              <button onClick={() => handleDeleteUser(user.id)}>Eliminar</button>
+              <button onClick={() => handleDeleteUser(user.id)}>
+                Eliminar
+              </button>
             </li>
           ))
         ) : (

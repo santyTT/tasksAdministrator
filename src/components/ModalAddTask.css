@@ -1,36 +1,33 @@
-/* Estilos básicos del modal */
 .modal {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 30%;
-    height: 100%;
-    background: white;
-    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    transform: translateX(100%); /* Fuera de pantalla al inicio */
-    transition: transform 0.4s ease-in-out; /* Transición suave */
-  }
-  
-  /* Clase que muestra el modal en pantalla */
-  .modal.slide-in {
-    transform: translateX(25%); /* Entra a la pantalla */
-  }
-  
-  /* Fondo oscuro detrás del modal */
-  .backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 5;
-  }
-  
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 30%;
+  height: 100%;
+  background: white;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.4s ease-in-out;
+}
+
+.modal.slide-in {
+  transform: translateX(25%);
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 5;
+}
+
 .modal form {
   padding-top: 25px;
 }
@@ -51,100 +48,95 @@
   color: rgba(179, 33, 33, 0.726);
 }
 
-.input1 input{
-    width: 85%;
-    margin-top: 22px;
-    padding: 20px 10px 4px 20px;
-    border-bottom: 1px solid gray;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    font-size: 14px;
+.input1 input {
+  width: 85%;
+  margin-top: 22px;
+  padding: 20px 10px 4px 20px;
+  border-bottom: 1px solid gray;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  font-size: 14px;
 }
 .input1 input:focus {
-    outline: none;
+  outline: none;
 }
 
 .descripcion-areaTxt textarea {
-    width: 91%;
-    height: 10vh;
-    border-radius: 10px;
-    margin: 10px;
-    resize: none;
-    padding: 10px;
-    font-size: 15px;
-    font-weight: 400;
-    font-family: sans-serif;
+  width: 91%;
+  height: 10vh;
+  border-radius: 10px;
+  margin: 10px;
+  resize: none;
+  padding: 10px;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: sans-serif;
 }
 .descripcion-areaTxt textarea:focus {
-    outline: none;
+  outline: none;
 }
 
 .alignInputs {
-    display: flex;
-    flex-direction: column;
-    align-items:start;
-    margin-bottom: 10px;
-    margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
-/* Estilo general para los selects */
 select {
-    width: 55%; /* Ajusta el ancho */
-    padding: 5px; /* Espaciado interno */
-    font-size: 16px; /* Tamaño del texto */
-    border: 2px solid #ccc; /* Borde */
-    border-radius: 2px; /* Bordes redondeados */
-    background-color: #f9f9f9; /* Fondo */
-    color: #333; 
-    margin-left: 10px;
-    transition: 600ms;
-  }
-  
-  /* Efecto al pasar el mouse por encima */
-  select:hover {
-    border-color: #007BFF; /* Cambia el color del borde */
-  }
-  
-  /* Estilo para el input de tipo fecha */
-  input[type="date"] {
-    width: 52%; /* Ajusta el ancho */
-    padding: 5px;
-    margin-left: 10px;
-    transition: 600ms;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 2px;
-    background-color: #f9f9f9;
-    color: #333;
-  }
-  
-  /* Efecto al enfocar (cuando haces clic o usas tab) */
-  input[type="date"]:focus,
-  select:focus {
-    border-color: #007BFF;
-    outline: none; /* Quita el contorno predeterminado */
-  }
-  
-  /* Estilo para un contenedor común (opcional) */
-  label {
-    font-weight: bold; /* Resalta el texto del label */
-    margin-bottom: 5px;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-  }
+  width: 55%;
+  padding: 5px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 2px;
+  background-color: #f9f9f9;
+  color: #333;
+  margin-left: 10px;
+  transition: 600ms;
+}
 
-  .button-addTaks {
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #007BFF;
-    background-color: #55e;
-    color: #f9f9f9;
-    cursor: pointer;
-    margin: 0 10% 0 10%;
-    transition: 400ms ease-in-out;
-  }
-  .button-addTaks:hover {
-    background-color: rgb(0, 0, 255);
-  }
+select:hover {
+  border-color: #007bff;
+}
+
+input[type="date"] {
+  width: 52%;
+  padding: 5px;
+  margin-left: 10px;
+  transition: 600ms;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 2px;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+input[type="date"]:focus,
+select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.button-addTaks {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #007bff;
+  background-color: #55e;
+  color: #f9f9f9;
+  cursor: pointer;
+  margin: 0 10% 0 10%;
+  transition: 400ms ease-in-out;
+}
+.button-addTaks:hover {
+  background-color: rgb(0, 0, 255);
+}

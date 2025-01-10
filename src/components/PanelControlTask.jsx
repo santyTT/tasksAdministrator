@@ -2,7 +2,7 @@ import "./panelControlTask.css";
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 
-// Función para formatear fechas en formato DD-MM-YYYY
+
 const formatDate = (dateString) => {
   if (!dateString) return "Sin fecha";
   const [year, month, day] = dateString.split("-");
@@ -13,7 +13,6 @@ const formatDate = (dateString) => {
 const PanelControlTask = ({ tasks, panel }) => {
   const [users, setUsers] = useState([]);
 
-  // Obtener usuarios del localStorage al cargar el componente
   useEffect(() => {
     const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
     setUsers(storedUsers);
@@ -118,10 +117,10 @@ PanelControlTask.propTypes = {
     PropTypes.shape({
       title: PropTypes.string.isRequired,
       observation: PropTypes.string,
-      user: PropTypes.string.isRequired, // Debe coincidir con el ID del usuario en localStorage
-      createdDate: PropTypes.string, // Fecha de creación
-      time: PropTypes.string, // Fecha límite
-      company: PropTypes.string, // Empresa asociada
+      user: PropTypes.string.isRequired, 
+      createdDate: PropTypes.string, 
+      time: PropTypes.string, 
+      company: PropTypes.string,
       status: PropTypes.string,
           panel: PropTypes.func.isRequired,
         })

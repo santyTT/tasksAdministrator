@@ -6,15 +6,14 @@ import UserList from "./userList";
 import DashboardAdmin from "./DashboardAdmin";
 
 const AdminDashboard = ({ onLogout }) => {
-  // Corrige el nombre de setActiveComponet a setActiveComponent
-  const [activeComponent, setActiveComponent] = useState('createUser');
+  const [activeComponent, setActiveComponent] = useState("createUser");
   const [users, setUsers] = useState([]);
 
   const handleChangeComponent = (Component) => {
     setActiveComponent(Component);
-  }
+  };
   const handleUserCreated = (newUser) => {
-    setUsers((prevUsers) => [...prevUsers, newUser]); // Agregar el nuevo usuario a la lista
+    setUsers((prevUsers) => [...prevUsers, newUser]);
   };
   return (
     <div className="bigC">
@@ -31,27 +30,49 @@ const AdminDashboard = ({ onLogout }) => {
             <input type="search" name="" id="" placeholder="Busca" />
           </div>
           <div className="itemsMedie">
-            <div><i className="fa-solid fa-table-columns"></i>
-              <button onClick={() => handleChangeComponent('dashboard')}>Dashboard</button>
+            <div>
+              <i className="fa-solid fa-table-columns"></i>
+              <button onClick={() => handleChangeComponent("dashboard")}>
+                Dashboard
+              </button>
             </div>
-            <div><i className="fa-solid fa-bell"></i>
-              <button onClick={() => handleChangeComponent('createUser')}>Notificaciones</button>
+            <div>
+              <i className="fa-solid fa-bell"></i>
+              <button onClick={() => handleChangeComponent("createUser")}>
+                Notificaciones
+              </button>
             </div>
-            <div><i className="fa-solid fa-user-group"></i>
-              <button onClick={() => handleChangeComponent('members')}>Miembros</button>
+            <div>
+              <i className="fa-solid fa-user-group"></i>
+              <button onClick={() => handleChangeComponent("members")}>
+                Miembros
+              </button>
             </div>
           </div>
         </div>
         <div className="bottomItems">
-          <button><i className="fa-solid fa-gear"></i> Configuracion</button>
-          <button onClick={onLogout}><i className="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+          <button>
+            <i className="fa-solid fa-gear"></i> Configuracion
+          </button>
+          <button onClick={onLogout}>
+            <i className="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+          </button>
         </div>
       </aside>
-      <main style={{overflowY: "scroll", height: "100vh", position: "relative", left: "3%"}} className="overScroll">
-        {/* Cambiar el renderizado según el estado */}
-        {activeComponent === 'createUser' && <CreateUser onUserCreated={handleUserCreated}  />}
-        {activeComponent === 'dashboard' && <DashboardAdmin />} {/* Renderiza un dashboard placeholder */}
-        {activeComponent === 'members' && <UserList users={users} />} {/* Renderiza los miembros */}
+      <main
+        style={{
+          overflowY: "scroll",
+          height: "100vh",
+          position: "relative",
+          left: "3%",
+        }}
+        className="overScroll"
+      >
+        {activeComponent === "createUser" && (
+          <CreateUser onUserCreated={handleUserCreated} />
+        )}
+        {activeComponent === "dashboard" && <DashboardAdmin />}
+        {activeComponent === "members" && <UserList users={users} />}
       </main>
     </div>
   );
