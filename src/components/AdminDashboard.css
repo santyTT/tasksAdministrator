@@ -17,6 +17,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 17px;
+  border-bottom: 1px solid #c1c2c469;
 }
 .top-accions div:nth-child(1) {
   display: flex;

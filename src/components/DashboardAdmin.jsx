@@ -73,7 +73,7 @@ const DashboardAdmin = () => {
     setModalOpen(!isModalOpen);
   };
   const toggleModalAddUser = () => {
-    setCreateUserM(!CreateUserM);
+    setCreateUserM(CreateUserM => !CreateUserM); 
   };
 
   const handleChange = (e) => {
@@ -84,7 +84,8 @@ const DashboardAdmin = () => {
   const handleTaskSubmit = (e) => {
     e.preventDefault();
     const createdDate = new Date().toISOString().split("T")[0];
-    const newTask = { id: Date.now(), ...formData, createdDate };
+    const userImage = users.find((user) => user.email === formData.user)?.picture;
+    const newTask = { id: Date.now(), ...formData, createdDate, userImage };
     setTasks([...tasks, newTask]);
     setFormData({
       title: "",
@@ -113,7 +114,7 @@ const DashboardAdmin = () => {
           <button onClick={toggleModalAddUser}>
             <i className="fa-solid fa-user-plus"></i>
           </button>
-          {!CreateUserM && <CreateUser />}
+          {CreateUserM && (<CreateUser close={toggleModalAddUser} />)}
         </div>
       </div>
 

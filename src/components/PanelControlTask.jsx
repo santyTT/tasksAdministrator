@@ -1,22 +1,146 @@
 import "./panelControlTask.css";
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
+import TaskTable from "./TaskTable";
+import SelectDeleteAreaEmpress from "./selectDeleteAP";
+import EditModal from "../modules/editTask";
+import TaskToComplete from "./TaskComplete";
+import DetailsModal from "./DetailsModal";
 
-
-const formatDate = (dateString) => {
-  if (!dateString) return "Sin fecha";
-  const [year, month, day] = dateString.split("-");
-  return `${day}-${month}-${year}`;
-};
-
-
-const PanelControlTask = ({ tasks, panel }) => {
+const PanelControlTask = () => {
   const [users, setUsers] = useState([]);
+  const [taskList, setTaskList] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState([]);
+  const [companies, setCompanies] = useState([]);
+  const [areas, setAreas] = useState([]);
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isViewing, setIsViewing] = useState(false);
 
   useEffect(() => {
     const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
     setUsers(storedUsers);
+    const storedCompanies = JSON.parse(localStorage.getItem("companies")) || [];
+    setCompanies(storedCompanies);
+    const storedAreas = JSON.parse(localStorage.getItem("areas")) || [];
+    setAreas(storedAreas);
   }, []);
+
+  useEffect(() => {
+    const storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    const activeTasks = storedTasks.filter(
+      (task) => !task.deleted && task.status !== "terminada"
+    );
+    const completedTasks = storedTasks.filter(
+      (task) => task.status === "terminada"
+    );
+    setTaskList(activeTasks);
+    setCompletedTasks(completedTasks);
+  }, []);
+
+  useEffect(() => {
+    const allTasks = [...taskList, ...completedTasks];
+    localStorage.setItem("tasks", JSON.stringify(allTasks));
+    localStorage.setItem("companies", JSON.stringify(companies));
+    localStorage.setItem("areas", JSON.stringify(areas));
+  }, [taskList, completedTasks, companies, areas]);
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "Sin fecha";
+    const [year, month, day] = dateString.split("-");
+    return `${day}-${month}-${year}`;
+  };
+
+  const handleCreateTask = () => {
+    const newTask = {
+      id: Date.now(),
+      title: "Edita titulo",
+      observation: "Edita Descripcion",
+      user: "",
+      createdDate: new Date().toISOString().split("T")[0],
+      projects: "",
+      company: "",
+      status: "no iniciada",
+      deleted: false,
+    };
+    setTaskList((prevTasks) => [...prevTasks, newTask]);
+  };
+
+  const handleEdit = (taskId) => {
+    const taskToEdit = taskList.find((task) => task.id === taskId);
+    setSelectedTask(taskToEdit);
+    setIsEditing(true);
+    setIsViewing(false);
+  };
+
+  const handleDelete = (taskId) => {
+    const confirmDelete = window.confirm(
+      "¿Estás seguro de que quieres borrar esta tarea?"
+    );
+    if (confirmDelete) {
+      const updatedTasks = taskList.filter((task) => task.id !== taskId);
+      setTaskList(updatedTasks);
+    }
+  };
+
+  const handleShowDetails = (taskId) => {
+    const taskToShow = taskList.find((task) => task.id === taskId);
+    setSelectedTask(taskToShow);
+    setIsViewing(true);
+    setIsEditing(false);
+  };
+
+  const saveEditedTask = (updatedTask) => {
+    const updatedTasks = taskList.map((task) =>
+      task.id === updatedTask.id ? updatedTask : task
+    );
+    setTaskList(updatedTasks);
+    setIsEditing(false);
+    setSelectedTask(null);
+  };
+
+  const handleAddCompany = () => {
+    const companyName = prompt("Ingrese el nombre de la empresa:");
+    if (companyName) {
+      setCompanies((prev) => [...prev, companyName]);
+    }
+  };
+
+  const handleAddArea = () => {
+    const areaName = prompt("Ingrese el nombre del área:");
+    if (areaName) {
+      setAreas((prev) => [...prev, areaName]);
+    }
+  };
+
+  const handleDeleteCompany = (company) => {
+    const confirmDelete = window.confirm(
+      `¿Estás seguro de que quieres eliminar la empresa "${company}"?`
+    );
+    if (confirmDelete) {
+      setCompanies((prev) => prev.filter((c) => c !== company));
+    }
+  };
+
+  const handleDeleteArea = (area) => {
+    const confirmDelete = window.confirm(
+      `¿Estás seguro de que quieres eliminar el área "${area}"?`
+    );
+    if (confirmDelete) {
+      setAreas((prev) => prev.filter((a) => a !== area));
+    }
+  };
+
+  const handleMarkAsCompleted = (taskId) => {
+    const taskToComplete = taskList.find((task) => task.id === taskId);
+    if (taskToComplete) {
+      const updatedTask = { ...taskToComplete, status: "terminada" };
+      setTaskList((prevTasks) =>
+        prevTasks.filter((task) => task.id !== taskId)
+      );
+      setCompletedTasks((prevTasks) => [...prevTasks, updatedTask]);
+    }
+  };
 
   return (
     <div>
@@ -30,84 +154,73 @@ const PanelControlTask = ({ tasks, panel }) => {
                   <i className="fa-solid fa-users-line"></i> Equipo
                 </span>
                 <span>
-                  <i className="fa-solid fa-boxes-stacked"></i> {tasks.length}{" "}
-                  tareas
+                  <i className="fa-solid fa-boxes-stacked"></i>{" "}
+                  {taskList.length} tareas
                 </span>
               </div>
             </div>
             <div>
-              <button style={{marginRight: "10px"}} onClick={panel}>
-                <i className="fa-solid fa-plus"></i> 
+              <button
+                style={{ marginRight: "10px" }}
+                onClick={handleCreateTask}
+              >
+                <i className="fa-solid fa-plus"></i> Crear Tarea
               </button>
-              <button>
-                <i className="fa-solid fa-filter"></i> Filtrar
+              <button onClick={handleAddCompany}>
+                <i className="fa-solid fa-building"></i> Añadir Empresa
               </button>
+              <button onClick={handleAddArea}>
+                <i className="fa-solid fa-pen-to-square"></i> Añadir Área
+              </button>
+              {/* Sección de empresas */}
             </div>
           </div>
           <div className="MediunBox">
             <span>
-              <i className="fa-solid fa-spinner"></i> No iniciadas
+              <i className="fa-solid fa-spinner"></i> En Progreso
             </span>
-            <span>
-              {tasks.filter((task) => task.status === "no iniciada").length}
-            </span>
+            <SelectDeleteAreaEmpress
+              companies={companies}
+              areas={areas}
+              onDeleteCompany={handleDeleteCompany}
+              onDeleteArea={handleDeleteArea}
+            />
           </div>
-          <div className="table">
-            <table className="task-table">
-              <thead>
-                <tr>
-                  <th>
-                    <i className="fa-solid fa-file-signature"></i> Tarea
-                  </th>
-                  <th>
-                    <i className="fa-solid fa-message"></i> Descripción
-                  </th>
-                  <th>
-                    <i className="fa-solid fa-users"></i> Persona
-                  </th>
-                  <th>
-                    <i className="fa-solid fa-hourglass-half"></i> Tiempo
-                  </th>
-                  <th>
-                    <i className="fa-solid fa-pen-to-square"></i> Area</th>
-                  <th>
-                    <i className="fa-solid fa-building"></i> Empresa
-                  </th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {tasks.map((task, index) => (
-                  <tr key={index}>
-                    <td>{task.title}</td>
-                    <td>{task.observation}</td>
-                    <td>
-                      {users.find((user) => user.email === task.user)
-                        ?.username || "Usuario desconocido"}
-                    </td>
-
-                    <td>
-                      {formatDate(task.createdDate)}/
-                      {task.time ? formatDate(task.time) : "Sin límite"}
-                    </td>
-                    <td>{task.projects}</td>
-                    <td>{task.company || "No asignada"}</td>
-                    <td className="edit-fill">
-                      <div className="task-actions">
-                        <div className="dropdown">
-                          <button className="dropbtn">
-                            <i className="fa-solid fa-ellipsis-vertical"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <TaskTable
+            tasks={taskList}
+            users={users}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            onShowDetails={handleShowDetails}
+            onComplete={handleMarkAsCompleted}
+          />
         </div>
+        <TaskToComplete
+          completedTasks={completedTasks}
+          taskList={taskList}
+          setTaskList={setTaskList}
+          users={users}
+          formatDate={formatDate}
+        />
       </main>
+      {isEditing && selectedTask && (
+        <EditModal
+          task={selectedTask}
+          onSave={saveEditedTask}
+          users={users}
+          areas={areas}
+          companies={companies}
+          setIsEditing={setIsEditing}
+        />
+      )}
+
+      {isViewing && selectedTask && (
+        <DetailsModal
+          selectedTask={selectedTask}
+          setSelectedTask={setSelectedTask}
+          formatDate={formatDate}
+        />
+      )}
     </div>
   );
 };
@@ -117,16 +230,15 @@ PanelControlTask.propTypes = {
     PropTypes.shape({
       title: PropTypes.string.isRequired,
       observation: PropTypes.string,
-      user: PropTypes.string.isRequired, 
-      createdDate: PropTypes.string, 
-      time: PropTypes.string, 
+      user: PropTypes.string.isRequired,
+      createdDate: PropTypes.string,
+      time: PropTypes.string,
       company: PropTypes.string,
       status: PropTypes.string,
-          panel: PropTypes.func.isRequired,
-        })
-      ).isRequired,
-      onEditTask: PropTypes.func.isRequired,
-      onDeleteTask: PropTypes.func.isRequired,
-      panel: PropTypes.func.isRequired,
-    };
+      userImage: PropTypes.string,
+    })
+  ).isRequired,
+  panel: PropTypes.func.isRequired,
+};
+
 export default PanelControlTask;
